@@ -10,8 +10,8 @@
 
 	<parent>
 		<groupId>com.github.MCE-Plugins</groupId>
-		<artifactId>MinigamesLib-parent</artifactId>
-		<version>1.0</version>
+		<artifactId>Snake-parent</artifactId>
+		<version>1.14.9-SNAPSHOT</version>
 	</parent>
 
 	<dependencies>
