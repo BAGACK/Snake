@@ -13,17 +13,29 @@
 		<artifactId>MinigamesLib-parent</artifactId>
 		<version>1.14.9-SNAPSHOT</version>
 	</parent>
-
-	<modules>
-		<module>Snake-Plugin</module>
-		<module>Snake-1.7.2</module>
-		<module>Snake-1.7.5</module>
-		<module>Snake-1.7.9</module>
-		<module>Snake-1.7.10</module>
-		<module>Snake-1.8</module>
-		<module>Snake-1.9</module>
-		<module>Snake-1.9.4</module>
-		<module>Snake-1.10</module>
-	</modules>
+	
+	<profiles>
+		<profile>
+      		<id>nms</id>
+      		<activation><activeByDefault>false</activeByDefault></activation>
+      		<modules>
+				<module>Snake-1.7.2</module>
+				<module>Snake-1.7.5</module>
+				<module>Snake-1.7.9</module>
+				<module>Snake-1.7.10</module>
+				<module>Snake-1.8</module>
+				<module>Snake-1.9</module>
+				<module>Snake-1.9.4</module>
+				<module>Snake-1.10</module>
+			</modules>
+    	</profile>
+    	<profile>
+    		<id>plugin</id>
+      		<activation><activeByDefault>false</activeByDefault></activation>
+      		<modules>
+				<module>Snake-Plugin</module>
+			</modules>
+    	</profile>
+	</profiles>
 
 </project>
