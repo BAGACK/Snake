@@ -1,14 +1,12 @@
 package com.comze_instancelabs.mgsnake.nms;
 
-import net.minecraft.server.v1_7_R3.DamageSource;
-import net.minecraft.server.v1_7_R3.Entity;
-import net.minecraft.server.v1_7_R3.EntityComplexPart;
-import net.minecraft.server.v1_7_R3.EntityFallingBlock;
-import net.minecraft.server.v1_7_R3.EntitySheep;
-import net.minecraft.server.v1_7_R3.World;
-
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
+
+import net.minecraft.server.v1_7_R3.DamageSource;
+import net.minecraft.server.v1_7_R3.EntityComplexPart;
+import net.minecraft.server.v1_7_R3.EntitySheep;
+import net.minecraft.server.v1_7_R3.World;
 
 public class MEFallingBlock1_7_9 extends EntitySheep {
 
@@ -88,6 +86,15 @@ public class MEFallingBlock1_7_9 extends EntitySheep {
 
 	public org.bukkit.craftbukkit.v1_7_R3.entity.CraftEntity getBukkitEntity() {
 		return super.getBukkitEntity();
+	}
+	
+	public Vector toVector()
+	{
+		return getBukkitEntity().getLocation().toVector();
+	}
+
+	public void setVelocity(Vector vel) {
+		getBukkitEntity().setVelocity(vel);
 	}
 
 }

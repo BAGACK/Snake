@@ -87,5 +87,14 @@ public class MEFallingBlock1_7_10 extends EntitySheep {
 	public org.bukkit.craftbukkit.v1_7_R4.entity.CraftEntity getBukkitEntity() {
 		return super.getBukkitEntity();
 	}
+	
+	public Vector toVector()
+	{
+		return getBukkitEntity().getLocation().toVector();
+	}
+
+	public void setVelocity(Vector vel) {
+		getBukkitEntity().setVelocity(vel);
+	}
 
 }

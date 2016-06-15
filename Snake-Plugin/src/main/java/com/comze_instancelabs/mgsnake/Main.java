@@ -29,6 +29,10 @@ import com.comze_instancelabs.mgsnake.nms.register1_7_10;
 import com.comze_instancelabs.mgsnake.nms.register1_7_2;
 import com.comze_instancelabs.mgsnake.nms.register1_7_5;
 import com.comze_instancelabs.mgsnake.nms.register1_7_9;
+import com.comze_instancelabs.mgsnake.nms.register1_8;
+import com.comze_instancelabs.mgsnake.nms.register1_9;
+import com.comze_instancelabs.mgsnake.nms.register1_9_4;
+import com.comze_instancelabs.mgsnake.nms.register1_10;
 import com.comze_instancelabs.minigamesapi.Arena;
 import com.comze_instancelabs.minigamesapi.ArenaSetup;
 import com.comze_instancelabs.minigamesapi.ArenaState;
@@ -52,6 +56,10 @@ public class Main extends JavaPlugin implements Listener {
 	public boolean v1_7_5 = false;
 	public boolean v1_7_9 = false;
 	public boolean v1_7_10 = false;
+	public boolean v1_8 = false;
+	public boolean v1_9 = false;
+	public boolean v1_9_4 = false;
+	public boolean v1_10 = false;
 
 	ICommandHandler cmdhandler = new ICommandHandler();
 	IArenaScoreboard scoreboard;
@@ -61,7 +69,8 @@ public class Main extends JavaPlugin implements Listener {
 
 	public void onEnable() {
 		m = this;
-		api = MinigamesAPI.getAPI().setupAPI(this, "snake", IArena.class, new ArenasConfig(this), new MessagesConfig(this), new IClassesConfig(this), new StatsConfig(this, false), new DefaultConfig(this, false), false);
+		MinigamesAPI.getAPI();
+		api = MinigamesAPI.setupAPI(this, "snake", IArena.class, new ArenasConfig(this), new MessagesConfig(this), new IClassesConfig(this), new StatsConfig(this, false), new DefaultConfig(this, false), false);
 		PluginInstance pinstance = api.pinstances.get(this);
 		pinstance.addLoadedArenas(loadArenas(this, pinstance.getArenasConfig()));
 		Bukkit.getPluginManager().registerEvents(this, this);
@@ -90,6 +99,22 @@ public class Main extends JavaPlugin implements Listener {
 			v1_7_10 = true;
 			register1_7_10.registerEntities();
 			getLogger().info("Turned on 1.7.10 mode.");
+		} else if (version.startsWith("v1_8")) { // 1.7.10
+			v1_8 = true;
+			register1_8.registerEntities();
+			getLogger().info("Turned on 1.8 mode.");
+		} else if (version.contains("v1_9_R1")) { // 1.7.10
+			v1_9 = true;
+			register1_9.registerEntities();
+			getLogger().info("Turned on 1.9/1.9.2 mode.");
+		} else if (version.contains("v1_9_R2")) { // 1.7.10
+			v1_9_4 = true;
+			register1_9_4.registerEntities();
+			getLogger().info("Turned on 1.9_4 mode.");
+		} else if (version.contains("v1_10_R1")) { // 1.7.10
+			v1_10 = true;
+			register1_10.registerEntities();
+			getLogger().info("Turned on 1.10 mode.");
 		} else { // 1.7.2
 			v1_7_2 = true;
 			register1_7_2.registerEntities();
