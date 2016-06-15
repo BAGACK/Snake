@@ -10,17 +10,13 @@ import net.minecraft.server.v1_7_R3.World;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
-import com.comze_instancelabs.mgsnake.Main;
-
 public class MEFallingBlock1_7_9 extends EntitySheep {
 
 	private boolean onGround = false;
-	private Main m;
 	private String arena;
 
-	public MEFallingBlock1_7_9(Main m, String arena, Location loc, World world) {
+	public MEFallingBlock1_7_9(String arena, Location loc, World world) {
 		super(world);
-		this.m = m;
 		this.arena = arena;
 		setPosition(loc.getX(), loc.getY(), loc.getZ());
 	}
