@@ -5,8 +5,8 @@
 	<artifactId>Snake-Plugin</artifactId>
 	<version>1.14.9-SNAPSHOT</version>
 	<packaging>jar</packaging>
-	<name>MinigamesLib-API</name>
-	<description>Rich Minigames API</description>
+	<name>Snake</name>
+	<description>Snake Minigame (Main plugin)</description>
 
 	<parent>
 		<groupId>com.github.MCE-Plugins</groupId>
@@ -107,7 +107,7 @@
 						<configuration>
 							<artifactSet>
 								<includes>
-									<include>com.comze_instancelabs:*</include>
+									<include>com.github.MCE-Plugins:*</include>
 								</includes>
 							</artifactSet>
 						</configuration>
