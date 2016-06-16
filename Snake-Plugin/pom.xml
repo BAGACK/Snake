@@ -107,7 +107,7 @@
 						<configuration>
 							<artifactSet>
 								<includes>
-									<include>com.github.MCE-Plugins:*</include>
+									<include>com.github.MCE-Plugins:Snake*</include>
 								</includes>
 							</artifactSet>
 						</configuration>
