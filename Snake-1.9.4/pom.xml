@@ -25,10 +25,9 @@
   		</dependency>
   		
   		<dependency>
-  			<groupId>org.spigotmc</groupId>
-  			<artifactId>spigot</artifactId>
-  			<version>1.9.4-R0.1-SNAPSHOT</version>
-  			<scope>provided</scope>
+  			<groupId>net.minecraft.server</groupId>
+  			<artifactId>v1_9_R2</artifactId>
+  			<version>1.9</version>
   		</dependency>
 	</dependencies>
 
@@ -74,7 +73,6 @@
 							<artifactSet>
 								<includes>
 									<include>com.comze_instancelabs:*</include>
-									<include>net.minecraft.server:*</include>
 								</includes>
 							</artifactSet>
 						</configuration>
