@@ -25,14 +25,15 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
 
+import com.comze_instancelabs.mgsnake.nms.register1_10;
 import com.comze_instancelabs.mgsnake.nms.register1_7_10;
 import com.comze_instancelabs.mgsnake.nms.register1_7_2;
 import com.comze_instancelabs.mgsnake.nms.register1_7_5;
 import com.comze_instancelabs.mgsnake.nms.register1_7_9;
 import com.comze_instancelabs.mgsnake.nms.register1_8;
+import com.comze_instancelabs.mgsnake.nms.register1_8_5;
 import com.comze_instancelabs.mgsnake.nms.register1_9;
 import com.comze_instancelabs.mgsnake.nms.register1_9_4;
-import com.comze_instancelabs.mgsnake.nms.register1_10;
 import com.comze_instancelabs.minigamesapi.Arena;
 import com.comze_instancelabs.minigamesapi.ArenaSetup;
 import com.comze_instancelabs.minigamesapi.ArenaState;
@@ -52,15 +53,6 @@ public class Main extends JavaPlugin implements Listener {
 	static Main m = null;
 	static int global_arenas_size = 30;
 
-	public boolean v1_7_2 = false;
-	public boolean v1_7_5 = false;
-	public boolean v1_7_9 = false;
-	public boolean v1_7_10 = false;
-	public boolean v1_8 = false;
-	public boolean v1_9 = false;
-	public boolean v1_9_4 = false;
-	public boolean v1_10 = false;
-
 	ICommandHandler cmdhandler = new ICommandHandler();
 	IArenaScoreboard scoreboard;
 
@@ -79,46 +71,53 @@ public class Main extends JavaPlugin implements Listener {
 		pli = pinstance;
 
 		// let's check which version we're on.
-		String version = Bukkit.getServer().getClass().getPackage().getName().substring(Bukkit.getServer().getClass().getPackage().getName().lastIndexOf(".") + 1);
-		Bukkit.getConsoleSender().sendMessage(ChatColor.BLUE + "MGSnake is running on " + version + ".");
-		if (Bukkit.getVersion().contains("v1_6")) {
-			getLogger().info("Turned on 1.6.4 mode. [unsupported]");
-		} else if (version.contains("v1_7_R1")) { // 1.7.2
-			v1_7_2 = true;
-			register1_7_2.registerEntities();
-			getLogger().info("Turned on 1.7.2 mode.");
-		} else if (version.contains("v1_7_R2")) { // 1.7.5
-			v1_7_5 = true;
-			register1_7_5.registerEntities();
-			getLogger().info("Turned on 1.7.5 mode.");
-		} else if (version.contains("v1_7_R3")) { // 1.7.9
-			v1_7_9 = true;
-			register1_7_9.registerEntities();
-			getLogger().info("Turned on 1.7.9 mode.");
-		} else if (version.contains("v1_7_R4")) { // 1.7.10
-			v1_7_10 = true;
-			register1_7_10.registerEntities();
-			getLogger().info("Turned on 1.7.10 mode.");
-		} else if (version.startsWith("v1_8")) { // 1.7.10
-			v1_8 = true;
-			register1_8.registerEntities();
-			getLogger().info("Turned on 1.8 mode.");
-		} else if (version.contains("v1_9_R1")) { // 1.7.10
-			v1_9 = true;
-			register1_9.registerEntities();
-			getLogger().info("Turned on 1.9/1.9.2 mode.");
-		} else if (version.contains("v1_9_R2")) { // 1.7.10
-			v1_9_4 = true;
-			register1_9_4.registerEntities();
-			getLogger().info("Turned on 1.9_4 mode.");
-		} else if (version.contains("v1_10_R1")) { // 1.7.10
-			v1_10 = true;
+		Bukkit.getConsoleSender().sendMessage(ChatColor.BLUE + "MGSnake is running on " + MinigamesAPI.SERVER_VERSION + ".");
+		switch (MinigamesAPI.SERVER_VERSION)
+		{
+		default:
+		case Unknown:
+			getLogger().info("Unsupported version");
+			break;
+		case V1_10:
+		case V1_10_R1:
 			register1_10.registerEntities();
 			getLogger().info("Turned on 1.10 mode.");
-		} else { // 1.7.2
-			v1_7_2 = true;
+			break;
+		case V1_7:
+		case V1_7_R1:
 			register1_7_2.registerEntities();
 			getLogger().info("Turned on 1.7.2 mode.");
+			break;
+		case V1_7_R2:
+			register1_7_5.registerEntities();
+			getLogger().info("Turned on 1.7.5 mode.");
+			break;
+		case V1_7_R3:
+			register1_7_9.registerEntities();
+			getLogger().info("Turned on 1.7.9 mode.");
+			break;
+		case V1_7_R4:
+			register1_7_10.registerEntities();
+			getLogger().info("Turned on 1.7.10 mode.");
+			break;
+		case V1_8_R1:
+		case V1_8:
+			register1_8.registerEntities();
+			getLogger().info("Turned on 1.8 mode.");
+			break;
+		case V1_8_R2:
+			register1_8_5.registerEntities();
+			getLogger().info("Turned on 1.8.5 mode.");
+			break;
+		case V1_9:
+		case V1_9_R1:
+			register1_9.registerEntities();
+			getLogger().info("Turned on 1.9/1.9.2 mode.");
+			break;
+		case V1_9_R2:
+			register1_9_4.registerEntities();
+			getLogger().info("Turned on 1.9_4 mode.");
+			break;
 		}
 
 		this.getConfig().addDefault("config.powerup_spawn_percentage", 5);
