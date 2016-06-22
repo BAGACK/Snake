@@ -1,6 +1,6 @@
 name: MGSnake
 main: com.comze_instancelabs.mgsnake.Main
-version: ${version}
+version: ${minigames.releaseversion}-${minigames.timestamp}
 author: [TheMrQuake,InstanceLabs,mepeisen]
 softdepend: [Vault, MinigamesLib]
 depend: [MinigamesLib]
