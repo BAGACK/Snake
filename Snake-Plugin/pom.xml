@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.MCE-Plugins</groupId>
-	<artifactId>Snake-Plugin</artifactId>
+	<artifactId>MGSnake-Plugin</artifactId>
 	<version>1.14.9-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>Snake</name>
@@ -10,7 +10,7 @@
 
 	<parent>
 		<groupId>com.github.MCE-Plugins</groupId>
-		<artifactId>Snake-parent</artifactId>
+		<artifactId>MGSnake-parent</artifactId>
 		<version>1.14.9-SNAPSHOT</version>
 	</parent>
 
@@ -26,47 +26,47 @@
   		
 		<dependency>
 			<groupId>com.github.MCE-Plugins</groupId>
-  			<artifactId>Snake-1.7.2</artifactId>
+  			<artifactId>MGSnake-1.7.2</artifactId>
   			<version>1.14.9-SNAPSHOT</version>
   		</dependency>
   		<dependency>
 			<groupId>com.github.MCE-Plugins</groupId>
-  			<artifactId>Snake-1.7.5</artifactId>
+  			<artifactId>MGSnake-1.7.5</artifactId>
   			<version>1.14.9-SNAPSHOT</version>
   		</dependency>
   		<dependency>
 			<groupId>com.github.MCE-Plugins</groupId>
-  			<artifactId>Snake-1.7.9</artifactId>
+  			<artifactId>MGSnake-1.7.9</artifactId>
   			<version>1.14.9-SNAPSHOT</version>
   		</dependency>
   		<dependency>
 			<groupId>com.github.MCE-Plugins</groupId>
-  			<artifactId>Snake-1.7.10</artifactId>
+  			<artifactId>MGSnake-1.7.10</artifactId>
   			<version>1.14.9-SNAPSHOT</version>
   		</dependency>
   		<dependency>
 			<groupId>com.github.MCE-Plugins</groupId>
-  			<artifactId>Snake-1.8</artifactId>
+  			<artifactId>MGSnake-1.8</artifactId>
   			<version>1.14.9-SNAPSHOT</version>
   		</dependency>
   		<dependency>
 			<groupId>com.github.MCE-Plugins</groupId>
-  			<artifactId>Snake-1.8.5</artifactId>
+  			<artifactId>MGSnake-1.8.5</artifactId>
   			<version>1.14.9-SNAPSHOT</version>
   		</dependency>
   		<dependency>
 			<groupId>com.github.MCE-Plugins</groupId>
-  			<artifactId>Snake-1.9</artifactId>
+  			<artifactId>MGSnake-1.9</artifactId>
   			<version>1.14.9-SNAPSHOT</version>
   		</dependency>
   		<dependency>
 			<groupId>com.github.MCE-Plugins</groupId>
-  			<artifactId>Snake-1.9.4</artifactId>
+  			<artifactId>MGSnake-1.9.4</artifactId>
   			<version>1.14.9-SNAPSHOT</version>
   		</dependency>
   		<dependency>
 			<groupId>com.github.MCE-Plugins</groupId>
-  			<artifactId>Snake-1.10</artifactId>
+  			<artifactId>MGSnake-1.10</artifactId>
   			<version>1.14.9-SNAPSHOT</version>
   		</dependency>
 	</dependencies>
@@ -118,7 +118,7 @@
 						<configuration>
 							<artifactSet>
 								<includes>
-									<include>com.github.MCE-Plugins:Snake*</include>
+									<include>com.github.MCE-Plugins:MGSnake*</include>
 								</includes>
 							</artifactSet>
 						</configuration>
