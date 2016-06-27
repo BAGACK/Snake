@@ -31,10 +31,10 @@ public class MEFallingBlock1_7_10 extends EntityFallingBlock implements FallingB
 		move(motX, motY, motZ);
 	}
 
-	/*@Override
+	@Override
 	public void g(double x, double y, double z) {
 
-	}*/
+	}
 
 	public boolean damageEntity(DamageSource damagesource, int i) {
 		return false;

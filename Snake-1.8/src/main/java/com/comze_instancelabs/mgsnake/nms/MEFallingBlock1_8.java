@@ -31,15 +31,15 @@ public class MEFallingBlock1_8 extends EntityFallingBlock implements FallingBloc
 		this.yaw = loc.getYaw();
 	}
 	@Override
-	public void h() {
+	public void s_() {
 		motY = 0;
 		move(motX, motY, motZ);
 	}
 
-	/*@Override
+	@Override
 	public void g(double x, double y, double z) {
 
-	}*/
+	}
 
 	public boolean damageEntity(DamageSource damagesource, int i) {
 		return false;

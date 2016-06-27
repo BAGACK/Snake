@@ -8,7 +8,6 @@ import net.minecraft.server.v1_9_R2.DamageSource;
 import net.minecraft.server.v1_9_R2.EntityComplexPart;
 import net.minecraft.server.v1_9_R2.EntityFallingBlock;
 import net.minecraft.server.v1_9_R2.IBlockData;
-import net.minecraft.server.v1_9_R2.MinecraftServer;
 import net.minecraft.server.v1_9_R2.World;
 
 public class MEFallingBlock1_9_4 extends EntityFallingBlock implements FallingBlock {
@@ -32,16 +31,15 @@ public class MEFallingBlock1_9_4 extends EntityFallingBlock implements FallingBl
 		this.yaw = loc.getYaw();
 	}
 	@Override
-	public MinecraftServer h() {
+	public void m() {
 		motY = 0;
 		move(motX, motY, motZ);
-		return null;
 	}
 
-	/*@Override
+	@Override
 	public void g(double x, double y, double z) {
 
-	}*/
+	}
 
 	public boolean damageEntity(DamageSource damagesource, int i) {
 		return false;

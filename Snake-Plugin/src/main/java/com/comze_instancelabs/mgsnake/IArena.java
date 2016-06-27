@@ -35,11 +35,14 @@ public class IArena extends Arena {
 	HashMap<String, Integer> pslimes = new HashMap<String, Integer>();
 	BukkitTask powerup_task;
 	private boolean useSheeps = true;
+	private long tickCount;
+	private long remainingTickCount;
 
-	public IArena(Main m, String arena, boolean useSheeps) {
+	public IArena(Main m, String arena, boolean useSheeps, long tickCount) {
 		super(m, arena);
 		this.m = m;
 		this.useSheeps = useSheeps;
+		this.tickCount = tickCount;
 	}
 
 	int failcount = 0;
@@ -103,18 +106,15 @@ public class IArena extends Arena {
 	@Override
 	public void leavePlayer(final String playername, final boolean fullLeave) {
 		Player p = Bukkit.getPlayer(playername);
-		for (Entity t : p.getNearbyEntities(70, 70, 70)) {
-			if (t.getType() == EntityType.SHEEP) {
-				Sheep sheep = (Sheep) t;
-				DyeColor color = ((Colorable) sheep).getColor();
-				if (pteam.containsKey(p.getName())) {
-					if (pteam.get(p.getName()) == (int) color.getData()) {
-						t.remove();
-					}
-				}
-
-			}
+		
+		// saveDestroyBlocks
+		final ArrayList<FallingBlock> plist = psheep.get(p);
+		for (FallingBlock ms : plist)
+		{
+			ms.die();
 		}
+		plist.clear();
+		
 		p.removePotionEffect(PotionEffectType.JUMP);
 		p.removePotionEffect(PotionEffectType.INVISIBILITY);
 		super.leavePlayer(playername, fullLeave);
@@ -143,6 +143,14 @@ public class IArena extends Arena {
 			p.removePotionEffect(PotionEffectType.INVISIBILITY);
 		}
 		super.spectate(playername);
+		
+		// saveDestroyBlocks
+		final ArrayList<FallingBlock> plist = psheep.get(p);
+		for (FallingBlock ms : plist)
+		{
+			ms.die();
+		}
+		plist.clear();
 	}
 
 	@Override
@@ -151,7 +159,18 @@ public class IArena extends Arena {
 			task.cancel();
 		}
 		super.stop();
-		pvecs.clear();
+		plocs.clear();
+		
+		// saveDestroyBlocks
+		for (final ArrayList<FallingBlock> plist : psheep.values())
+		{
+			for (FallingBlock ms : plist)
+			{
+				ms.die();
+			}
+			plist.clear();
+		}
+		
 		this.psheep.clear();
 	}
 
@@ -183,6 +202,7 @@ public class IArena extends Arena {
 	}
 
 	private void initPlayerMovements(final String arena) {
+		this.remainingTickCount = this.tickCount;
 		boolean invisible = m.getConfig().getBoolean("config.players_invisible");
 		for (String p_ : this.getAllPlayers()) {
 			final Player p = Bukkit.getPlayer(p_);
@@ -195,9 +215,13 @@ public class IArena extends Arena {
 			Vector v = p.getLocation().getDirection().normalize();
 			Location l = p.getLocation().subtract((new Vector(v.getX(), 0.0001D, v.getZ())));
 			Location l_ = p.getLocation().subtract((new Vector(v.getX(), 0.0001D, v.getZ()).multiply(2D)));
+			final Location l2 = l.add(0D, 1D, 0D);
+			final Location l_2 = l_.add(0D, 1D, 0D);
+			l2.setY(Math.floor(l2.getY())); // Seems to correct the first sheeps (they were not on the ground)
+			l_2.setY(Math.floor(l_2.getY())); // Seems to correct the first sheeps (they were not on the ground)
 			final ArrayList<FallingBlock> temp = new ArrayList<>(Arrays.asList(
-					this.spawn(l.add(0D, 1D, 0D), pteam.get(p.getName())),
-					this.spawn(l_.add(0D, 1D, 0D), pteam.get(p.getName()))));
+					this.spawn(l2, pteam.get(p.getName())),
+					this.spawn(l_2, pteam.get(p.getName()))));
 			debugPSheep(p_, temp);
 			psheep.put(p, temp);
 		}
@@ -279,15 +303,15 @@ public class IArena extends Arena {
 							}
 						}
 
-						if (!pvecs.containsKey(p)) {
-							pvecs.put(p, new ArrayList<Vector>(Arrays.asList(v.multiply(0.45D))));
-						} else {
-							ArrayList<Vector> temp = pvecs.get(p);
-							if (temp.size() > arenasize.get(arena)) {
-								temp.remove(0);
-							}
-							temp.add(v.multiply(0.45D));
-						}
+//						if (!pvecs.containsKey(p)) {
+//							pvecs.put(p, new ArrayList<Vector>(Arrays.asList(v.multiply(0.45D))));
+//						} else {
+//							ArrayList<Vector> temp = pvecs.get(p);
+//							if (temp.size() > arenasize.get(arena)) {
+//								temp.remove(0);
+//							}
+//							temp.add(v.multiply(0.45D));
+//						}
 
 						// System.out.println("[A] " + pvecs.size() +
 						// pvecs.get(p));
@@ -307,35 +331,41 @@ public class IArena extends Arena {
 
 	public HashMap<Player, ArrayList<FallingBlock>> psheep = new HashMap<>();
 
-	public HashMap<Player, ArrayList<Vector>> pvecs = new HashMap<Player, ArrayList<Vector>>();
+	//public HashMap<Player, ArrayList<Vector>> pvecs = new HashMap<Player, ArrayList<Vector>>();
 
 	private void updateLocs(String arena) {
 		IArena a = this;
+		this.remainingTickCount--;
+		boolean updatePLocs = false;
+		if (this.remainingTickCount == 0)
+		{
+			this.remainingTickCount = this.tickCount;
+			updatePLocs = true;
+		}
 		for (String p__ : a.getAllPlayers()) {
 			Player p_ = Bukkit.getPlayer(p__);
 			if (!MinigamesAPI.getAPI().pinstances.get(m).global_lost.containsKey(p_)) {
-
 				if (!plocs.containsKey(p_)) {
 					plocs.put(p_, new ArrayList<Location>(Arrays.asList(p_.getLocation())));
-				} else {
+				} else if (updatePLocs) {
 					ArrayList<Location> temp = plocs.get(p_);
 					if (temp.size() > arenasize.get(arena)) {
 						temp.remove(0);
 					}
 					temp.add(p_.getLocation());
+				}
 
-					int c = 0;
-					final ArrayList<FallingBlock> plist = psheep.get(p_);
-					for (FallingBlock ms : plist) {
-						if (c < pvecs.get(p_).size()) {
-							final Location bl = plocs.get(p_).get(c);
-							Vector direction = bl.toVector()
-									.subtract(ms.toVector()).normalize();
-							ms.setYaw(bl);
-							ms.setVelocity(direction.multiply(0.5D));
-							if (MinigamesAPI.debug) System.out.println("Sheep[" + p__ + "/" + ms.toVector() + "] yaws at " + bl);
-							c++;
-						}
+				int c = 0;
+				final ArrayList<FallingBlock> plist = psheep.get(p_);
+				for (FallingBlock ms : plist) {
+					if (c < plocs.get(p_).size()) {
+						final Location bl = plocs.get(p_).get(c);
+						Vector direction = bl.toVector()
+								.subtract(ms.toVector()).normalize();
+						ms.setYaw(bl);
+						ms.setVelocity(direction.multiply(0.5D));
+						if (MinigamesAPI.debug) System.out.println("Sheep[" + p__ + "/" + ms.toVector() + "] yaws at " + bl);
+						c++;
 					}
 					debugPSheep(p__, plist);
 				}
