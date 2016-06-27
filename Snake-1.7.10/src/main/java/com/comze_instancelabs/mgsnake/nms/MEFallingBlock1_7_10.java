@@ -5,12 +5,11 @@ import org.bukkit.util.Vector;
 
 import net.minecraft.server.v1_7_R4.DamageSource;
 import net.minecraft.server.v1_7_R4.EntityComplexPart;
-import net.minecraft.server.v1_7_R4.EntitySheep;
+import net.minecraft.server.v1_7_R4.EntityFallingBlock;
 import net.minecraft.server.v1_7_R4.World;
 
-public class MEFallingBlock1_7_10 extends EntitySheep {
+public class MEFallingBlock1_7_10 extends EntityFallingBlock implements FallingBlock {
 
-	private boolean onGround = false;
 	private String arena;
 
 	public MEFallingBlock1_7_10(String arena, Location loc, World world) {
@@ -19,52 +18,13 @@ public class MEFallingBlock1_7_10 extends EntitySheep {
 		setPosition(loc.getX(), loc.getY(), loc.getZ());
 	}
 
-	int X;
-	int Y;
-	int Z;
 
 	public void setYaw(Location target) {
-		double disX = (this.locX - target.getX());
-		double disY = (this.locY - target.getY());
-		double disZ = (this.locZ - target.getZ());
-
-		this.X = (int) (Math.abs(disX));
-		this.Y = (int) (Math.abs(disY));
-		this.Z = (int) (Math.abs(disZ));
-
-		if (this.locX <= target.getX()) {
-			if (this.locZ >= target.getZ()) {
-				this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z)) + 180F;
-			} else {
-				this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z)) - 90F;
-			}
-		} else { // (this.locX > target.getX())
-			if (this.locZ >= target.getZ()) {
-				this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z)) + 90F;
-			} else {
-				this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z));
-			}
-		}
+		final Location loc = new Location(target.getWorld(), this.locX, this.locY, this.locZ);
+		loc.setDirection(target.toVector().subtract(loc.toVector()));
+		this.yaw = loc.getYaw();
 	}
-
-	public static float getLookAtYaw(Vector motion) {
-		double dx = motion.getX();
-		double dz = motion.getZ();
-		double yaw = 0;
-
-		if (dx != 0) {
-			if (dx < 0) {
-				yaw = 1.5 * Math.PI;
-			} else {
-				yaw = 0.5 * Math.PI;
-			}
-			yaw -= Math.atan(dz / dx);
-		} else if (dz < 0) {
-			yaw = Math.PI;
-		}
-		return (float) (-yaw * 180 / Math.PI - 90);
-	}
-
+	
 	@Override
 	public void h() {
 		motY = 0;

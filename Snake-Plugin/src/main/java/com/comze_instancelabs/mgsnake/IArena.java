@@ -21,24 +21,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
-import com.comze_instancelabs.mgsnake.nms.MEFallingBlock1_10;
-import com.comze_instancelabs.mgsnake.nms.MEFallingBlock1_7_10;
-import com.comze_instancelabs.mgsnake.nms.MEFallingBlock1_7_2;
-import com.comze_instancelabs.mgsnake.nms.MEFallingBlock1_7_5;
-import com.comze_instancelabs.mgsnake.nms.MEFallingBlock1_7_9;
-import com.comze_instancelabs.mgsnake.nms.MEFallingBlock1_8;
-import com.comze_instancelabs.mgsnake.nms.MEFallingBlock1_8_5;
-import com.comze_instancelabs.mgsnake.nms.MEFallingBlock1_9;
-import com.comze_instancelabs.mgsnake.nms.MEFallingBlock1_9_4;
-import com.comze_instancelabs.mgsnake.nms.register1_10;
-import com.comze_instancelabs.mgsnake.nms.register1_7_10;
-import com.comze_instancelabs.mgsnake.nms.register1_7_2;
-import com.comze_instancelabs.mgsnake.nms.register1_7_5;
-import com.comze_instancelabs.mgsnake.nms.register1_7_9;
-import com.comze_instancelabs.mgsnake.nms.register1_8;
-import com.comze_instancelabs.mgsnake.nms.register1_8_5;
-import com.comze_instancelabs.mgsnake.nms.register1_9;
-import com.comze_instancelabs.mgsnake.nms.register1_9_4;
+import com.comze_instancelabs.mgsnake.nms.FallingBlock;
 import com.comze_instancelabs.minigamesapi.Arena;
 import com.comze_instancelabs.minigamesapi.ArenaState;
 import com.comze_instancelabs.minigamesapi.MinigamesAPI;
@@ -51,28 +34,37 @@ public class IArena extends Arena {
 	HashMap<String, Integer> pteam = new HashMap<String, Integer>();
 	HashMap<String, Integer> pslimes = new HashMap<String, Integer>();
 	BukkitTask powerup_task;
+	private boolean useSheeps = true;
 
-	public IArena(Main m, String arena) {
+	public IArena(Main m, String arena, boolean useSheeps) {
 		super(m, arena);
 		this.m = m;
+		this.useSheeps = useSheeps;
 	}
 
 	int failcount = 0;
+	
+	private FallingBlock spawn(Location location, Integer color)
+	{
+		return this.useSheeps ? this.m.getNmsRegister().spawnSheep(this.m, this.getInternalName(), location, color) : this.m.getNmsRegister().spawnWool(this.m, this.getInternalName(), location, color);
+	}
 
 	@Override
 	public void started() {
-		initPlayerMovements(this.getName());
+		initPlayerMovements(this.getInternalName());
 		final IArena a = this;
 		powerup_task = Bukkit.getScheduler().runTaskTimer(m, new Runnable() {
 			public void run() {
 				if (Math.random() * 100 <= m.getConfig().getInt("config.powerup_spawn_percentage")) {
 					try {
-						Player p = Bukkit.getPlayer(a.getAllPlayers().get((int) Math.random() * (a.getAllPlayers().size() - 1)));
+						Player p = Bukkit
+								.getPlayer(a.getAllPlayers().get((int) Math.random() * (a.getAllPlayers().size() - 1)));
 						if (p != null) {
 							boolean spawn = true;
 							if (MinigamesAPI.getAPI().pinstances.get(m).global_lost.containsKey(p.getName())) {
 								// player is a spectator, retry
-								p = Bukkit.getPlayer(a.getAllPlayers().get((int) Math.random() * (a.getAllPlayers().size() - 1)));
+								p = Bukkit.getPlayer(
+										a.getAllPlayers().get((int) Math.random() * (a.getAllPlayers().size() - 1)));
 								if (p != null) {
 									if (MinigamesAPI.getAPI().pinstances.get(m).global_lost.containsKey(p.getName())) {
 										spawn = false;
@@ -160,14 +152,7 @@ public class IArena extends Arena {
 		}
 		super.stop();
 		pvecs.clear();
-		this.psheep1_7_10.clear();
-		this.psheep1_7_9.clear();
-		this.psheep1_7_5.clear();
-		this.psheep1_7_2.clear();
-		this.psheep1_8.clear();
-		this.psheep1_9.clear();
-		this.psheep1_9_4.clear();
-		this.psheep1_10.clear();
+		this.psheep.clear();
 	}
 
 	public ItemStack getItemStack() {
@@ -184,6 +169,18 @@ public class IArena extends Arena {
 	}
 
 	Random r = new Random();
+	
+	private void debugPSheep(String player, ArrayList<FallingBlock> blocks)
+	{
+		if (MinigamesAPI.debug)
+		{
+			System.out.println("SHEEPS[" + player + "]:");
+			for (final FallingBlock block : blocks)
+			{
+				System.out.println("  " + block.toVector());
+			}
+		}
+	}
 
 	private void initPlayerMovements(final String arena) {
 		boolean invisible = m.getConfig().getBoolean("config.players_invisible");
@@ -198,70 +195,11 @@ public class IArena extends Arena {
 			Vector v = p.getLocation().getDirection().normalize();
 			Location l = p.getLocation().subtract((new Vector(v.getX(), 0.0001D, v.getZ())));
 			Location l_ = p.getLocation().subtract((new Vector(v.getX(), 0.0001D, v.getZ()).multiply(2D)));
-			switch (MinigamesAPI.SERVER_VERSION)
-			{
-			case Unknown:
-			default:
-				break;
-			case V1_10:
-			case V1_10_R1:
-				{
-					ArrayList<MEFallingBlock1_10> temp = new ArrayList<MEFallingBlock1_10>(Arrays.asList(register1_10.spawnSheep(m, arena, l.add(0D, 1D, 0D), pteam.get(p.getName())), register1_10.spawnSheep(m, arena, l_.add(0D, 1D, 0D), pteam.get(p.getName()))));
-					psheep1_10.put(p, temp);
-				}
-				break;
-			case V1_7:
-			case V1_7_R1:
-				{
-					ArrayList<MEFallingBlock1_7_2> temp = new ArrayList<MEFallingBlock1_7_2>(Arrays.asList(register1_7_2.spawnSheep(m, arena, l.add(0D, 1D, 0D), pteam.get(p.getName())), register1_7_2.spawnSheep(m, arena, l_.add(0D, 1D, 0D), pteam.get(p.getName()))));
-					psheep1_7_2.put(p, temp);
-				}
-				break;
-			case V1_7_R2:
-				{
-					ArrayList<MEFallingBlock1_7_5> temp = new ArrayList<MEFallingBlock1_7_5>(Arrays.asList(register1_7_5.spawnSheep(m, arena, l.add(0D, 1D, 0D), pteam.get(p.getName())), register1_7_5.spawnSheep(m, arena, l_.add(0D, 1D, 0D), pteam.get(p.getName()))));
-					psheep1_7_5.put(p, temp);
-				}
-				break;
-			case V1_7_R3:
-				{
-					ArrayList<MEFallingBlock1_7_9> temp = new ArrayList<MEFallingBlock1_7_9>(Arrays.asList(register1_7_9.spawnSheep(m, arena, l.add(0D, 1D, 0D), pteam.get(p.getName())), register1_7_9.spawnSheep(m, arena, l_.add(0D, 1D, 0D), pteam.get(p.getName()))));
-					psheep1_7_9.put(p, temp);
-				}
-				break;
-			case V1_7_R4:
-				{
-					ArrayList<MEFallingBlock1_7_10> temp = new ArrayList<MEFallingBlock1_7_10>(Arrays.asList(register1_7_10.spawnSheep(m, arena, l.add(0D, 1D, 0D), pteam.get(p.getName())), register1_7_10.spawnSheep(m, arena, l_.add(0D, 1D, 0D), pteam.get(p.getName()))));
-					psheep1_7_10.put(p, temp);
-				}
-				break;
-			case V1_8:
-			case V1_8_R1:
-				{
-					ArrayList<MEFallingBlock1_8> temp = new ArrayList<MEFallingBlock1_8>(Arrays.asList(register1_8.spawnSheep(m, arena, l.add(0D, 1D, 0D), pteam.get(p.getName())), register1_8.spawnSheep(m, arena, l_.add(0D, 1D, 0D), pteam.get(p.getName()))));
-					psheep1_8.put(p, temp);
-				}
-				break;
-			case V1_8_R2:
-				{
-					ArrayList<MEFallingBlock1_8_5> temp = new ArrayList<MEFallingBlock1_8_5>(Arrays.asList(register1_8_5.spawnSheep(m, arena, l.add(0D, 1D, 0D), pteam.get(p.getName())), register1_8_5.spawnSheep(m, arena, l_.add(0D, 1D, 0D), pteam.get(p.getName()))));
-					psheep1_8_5.put(p, temp);
-				}
-				break;
-			case V1_9:
-			case V1_9_R1:
-				{
-					ArrayList<MEFallingBlock1_9> temp = new ArrayList<MEFallingBlock1_9>(Arrays.asList(register1_9.spawnSheep(m, arena, l.add(0D, 1D, 0D), pteam.get(p.getName())), register1_9.spawnSheep(m, arena, l_.add(0D, 1D, 0D), pteam.get(p.getName()))));
-					psheep1_9.put(p, temp);
-				}
-				break;
-			case V1_9_R2:
-				{
-					ArrayList<MEFallingBlock1_9_4> temp = new ArrayList<MEFallingBlock1_9_4>(Arrays.asList(register1_9_4.spawnSheep(m, arena, l.add(0D, 1D, 0D), pteam.get(p.getName())), register1_9_4.spawnSheep(m, arena, l_.add(0D, 1D, 0D), pteam.get(p.getName()))));
-					psheep1_9_4.put(p, temp);
-				}
-				break;
-			}
+			final ArrayList<FallingBlock> temp = new ArrayList<>(Arrays.asList(
+					this.spawn(l.add(0D, 1D, 0D), pteam.get(p.getName())),
+					this.spawn(l_.add(0D, 1D, 0D), pteam.get(p.getName()))));
+			debugPSheep(p_, temp);
+			psheep.put(p, temp);
 		}
 
 		BukkitTask t = null;
@@ -294,7 +232,9 @@ public class IArena extends Arena {
 						Vector v = p.getLocation().getDirection().normalize();
 						Location l = p.getLocation().subtract((new Vector(v.getX(), 0.0001D, v.getZ()).multiply(-1D)));
 
-						if (l.clone().add(0D, 1D, 0D).getBlock().getType() != Material.AIR) {
+						Location pl_ = l.clone().add(0D, 1D, 0D);
+						if (pl_.getBlock().getType() != Material.AIR) {
+							if (MinigamesAPI.debug) System.out.println("Player " + p_ + " ran into solid block @ " + pl_);
 							a.spectate(p.getName());
 						}
 
@@ -306,15 +246,23 @@ public class IArena extends Arena {
 							} else {
 								temp += 3;
 							}
-							Slime s = (Slime) p.getWorld().spawnEntity(p.getLocation().add(temp, 0, temp), EntityType.SLIME);
+							Slime s = (Slime) p.getWorld().spawnEntity(p.getLocation().add(temp, 0, temp),
+									EntityType.SLIME);
 							s.setSize(1);
 						}
 
 						for (Entity ent : p.getNearbyEntities(1, 1, 1)) {
-							if (ent.getType() == EntityType.SHEEP) {
+							if (useSheeps && ent.getType() == EntityType.SHEEP) {
 								Sheep s = (Sheep) ent;
 								DyeColor color = ((Colorable) s).getColor();
 								if (color.getData() != (byte) pteam.get(p.getName()).byteValue()) {
+									if (MinigamesAPI.debug) System.out.println("Player " + p_ + " ran into sheeps with color " + color);
+									a.spectate(p.getName());
+								}
+							} else if (!useSheeps && ent.getType() == EntityType.FALLING_BLOCK) {
+								org.bukkit.entity.FallingBlock s = (org.bukkit.entity.FallingBlock) ent;
+								if (s.getBlockData() != (byte) pteam.get(p.getName()).byteValue()) {
+									if (MinigamesAPI.debug) System.out.println("Player " + p_ + " ran into block with color " + s.getBlockData());
 									a.spectate(p.getName());
 								}
 							} else if (ent.getType() == EntityType.SLIME) {
@@ -324,79 +272,8 @@ public class IArena extends Arena {
 								for (String p__ : a.getAllPlayers()) {
 									final Player pp = Bukkit.getPlayer(p__);
 									if (!MinigamesAPI.getAPI().pinstances.get(m).global_lost.containsKey(p__)) {
-										switch (MinigamesAPI.SERVER_VERSION)
-										{
-										default:
-										case Unknown:
-											break;
-										case V1_10:
-										case V1_10_R1:
-											{
-												ArrayList<MEFallingBlock1_10> temp = new ArrayList<MEFallingBlock1_10>(psheep1_10.get(pp));
-												temp.add(register1_10.spawnSheep(m, arena, pp.getLocation(), pteam.get(pp.getName())));
-												psheep1_10.put(pp, temp);
-											}
-											break;
-										case V1_7:
-										case V1_7_R1:
-											{
-												ArrayList<MEFallingBlock1_7_2> temp = new ArrayList<MEFallingBlock1_7_2>(psheep1_7_2.get(pp));
-												temp.add(register1_7_2.spawnSheep(m, arena, pp.getLocation(), pteam.get(pp.getName())));
-												psheep1_7_2.put(pp, temp);
-											}
-											break;
-										case V1_7_R2:
-											{
-												ArrayList<MEFallingBlock1_7_5> temp = new ArrayList<MEFallingBlock1_7_5>(psheep1_7_5.get(pp));
-												temp.add(register1_7_5.spawnSheep(m, arena, pp.getLocation(), pteam.get(pp.getName())));
-												psheep1_7_5.put(pp, temp);
-											}
-											break;
-										case V1_7_R3:
-											{
-												ArrayList<MEFallingBlock1_7_9> temp = new ArrayList<MEFallingBlock1_7_9>(psheep1_7_9.get(pp));
-												temp.add(register1_7_9.spawnSheep(m, arena, pp.getLocation(), pteam.get(pp.getName())));
-												psheep1_7_9.put(pp, temp);
-											}
-											break;
-										case V1_7_R4:
-											{
-												ArrayList<MEFallingBlock1_7_10> temp = new ArrayList<MEFallingBlock1_7_10>(psheep1_7_10.get(pp));
-												temp.add(register1_7_10.spawnSheep(m, arena, pp.getLocation(), pteam.get(pp.getName())));
-												psheep1_7_10.put(pp, temp);
-											}
-											break;
-										case V1_8:
-										case V1_8_R1:
-											{
-												ArrayList<MEFallingBlock1_8> temp = new ArrayList<MEFallingBlock1_8>(psheep1_8.get(pp));
-												temp.add(register1_8.spawnSheep(m, arena, pp.getLocation(), pteam.get(pp.getName())));
-												psheep1_8.put(pp, temp);
-											}
-											break;
-										case V1_8_R2:
-											{
-												ArrayList<MEFallingBlock1_8_5> temp = new ArrayList<MEFallingBlock1_8_5>(psheep1_8_5.get(pp));
-												temp.add(register1_8_5.spawnSheep(m, arena, pp.getLocation(), pteam.get(pp.getName())));
-												psheep1_8_5.put(pp, temp);
-											}
-											break;
-										case V1_9:
-										case V1_9_R1:
-											{
-												ArrayList<MEFallingBlock1_9> temp = new ArrayList<MEFallingBlock1_9>(psheep1_9.get(pp));
-												temp.add(register1_9.spawnSheep(m, arena, pp.getLocation(), pteam.get(pp.getName())));
-												psheep1_9.put(pp, temp);
-											}
-											break;
-										case V1_9_R2:
-											{
-												ArrayList<MEFallingBlock1_9_4> temp = new ArrayList<MEFallingBlock1_9_4>(psheep1_9_4.get(pp));
-												temp.add(register1_9_4.spawnSheep(m, arena, pp.getLocation(), pteam.get(pp.getName())));
-												psheep1_9_4.put(pp, temp);
-											}
-											break;
-										}
+										final Integer color = pteam.get(pp.getName());
+										psheep.get(pp).add(0, spawn(pp.getLocation(), color));
 									}
 								}
 							}
@@ -405,20 +282,20 @@ public class IArena extends Arena {
 						if (!pvecs.containsKey(p)) {
 							pvecs.put(p, new ArrayList<Vector>(Arrays.asList(v.multiply(0.45D))));
 						} else {
-							ArrayList<Vector> temp = new ArrayList<Vector>(pvecs.get(p));
+							ArrayList<Vector> temp = pvecs.get(p);
 							if (temp.size() > arenasize.get(arena)) {
 								temp.remove(0);
 							}
 							temp.add(v.multiply(0.45D));
-							pvecs.put(p, temp);
 						}
 
-						// System.out.println("[A] " + pvecs.size() + pvecs.get(p));
-
-						updateLocs(arena);
+						// System.out.println("[A] " + pvecs.size() +
+						// pvecs.get(p));
 
 					}
 				}
+
+				updateLocs(arena);
 			}
 		}, 2L, 2L);
 
@@ -428,17 +305,7 @@ public class IArena extends Arena {
 	public HashMap<Player, ArrayList<Location>> plocs = new HashMap<Player, ArrayList<Location>>();
 	public HashMap<String, Integer> arenasize = new HashMap<String, Integer>();
 
-	public HashMap<Player, ArrayList<MEFallingBlock1_8_5>> psheep1_8_5 = new HashMap<Player, ArrayList<MEFallingBlock1_8_5>>();
-	public HashMap<Player, ArrayList<MEFallingBlock1_8>> psheep1_8 = new HashMap<Player, ArrayList<MEFallingBlock1_8>>();
-	public HashMap<Player, ArrayList<MEFallingBlock1_9>> psheep1_9 = new HashMap<Player, ArrayList<MEFallingBlock1_9>>();
-	public HashMap<Player, ArrayList<MEFallingBlock1_9_4>> psheep1_9_4 = new HashMap<Player, ArrayList<MEFallingBlock1_9_4>>();
-	public HashMap<Player, ArrayList<MEFallingBlock1_10>> psheep1_10 = new HashMap<Player, ArrayList<MEFallingBlock1_10>>();
-
-	
-	public HashMap<Player, ArrayList<MEFallingBlock1_7_2>> psheep1_7_2 = new HashMap<Player, ArrayList<MEFallingBlock1_7_2>>();
-	public HashMap<Player, ArrayList<MEFallingBlock1_7_5>> psheep1_7_5 = new HashMap<Player, ArrayList<MEFallingBlock1_7_5>>();
-	public HashMap<Player, ArrayList<MEFallingBlock1_7_9>> psheep1_7_9 = new HashMap<Player, ArrayList<MEFallingBlock1_7_9>>();
-	public HashMap<Player, ArrayList<MEFallingBlock1_7_10>> psheep1_7_10 = new HashMap<Player, ArrayList<MEFallingBlock1_7_10>>();
+	public HashMap<Player, ArrayList<FallingBlock>> psheep = new HashMap<>();
 
 	public HashMap<Player, ArrayList<Vector>> pvecs = new HashMap<Player, ArrayList<Vector>>();
 
@@ -451,159 +318,26 @@ public class IArena extends Arena {
 				if (!plocs.containsKey(p_)) {
 					plocs.put(p_, new ArrayList<Location>(Arrays.asList(p_.getLocation())));
 				} else {
-					ArrayList<Location> temp = new ArrayList<Location>(plocs.get(p_));
+					ArrayList<Location> temp = plocs.get(p_);
 					if (temp.size() > arenasize.get(arena)) {
 						temp.remove(0);
 					}
 					temp.add(p_.getLocation());
-					plocs.put(p_, temp);
 
 					int c = 0;
-					switch (MinigamesAPI.SERVER_VERSION)
-					{
-					case Unknown:
-					default:
-						break;
-					case V1_10:
-					case V1_10_R1: {
-						for (MEFallingBlock1_10 ms : psheep1_10.get(p_)) {
-							if (pvecs.containsKey(p_)) {
-								if (c < pvecs.get(p_).size()) {
-									Vector direction = plocs.get(p_).get(c).toVector().subtract(psheep1_10.get(p_).get(c).toVector()).normalize();
-									psheep1_10.get(p_).get(c).setYaw(plocs.get(p_).get(c));
-									psheep1_10.get(p_).get(c).setVelocity(direction.multiply(0.5D));
-									c++;
-								}
-							} else {
-								pvecs.put(p_, new ArrayList<Vector>(Arrays.asList(p_.getLocation().getDirection().normalize().add(new Vector(0.1D, 0.1D, 0.1D)))));
-							}
-						}
-					} 
-						break;
-					case V1_7:
-					case V1_7_R1: {
-						for (MEFallingBlock1_7_2 ms : psheep1_7_2.get(p_)) {
-							if (pvecs.containsKey(p_)) {
-								if (c < pvecs.get(p_).size()) {
-									Vector direction = plocs.get(p_).get(c).toVector().subtract(psheep1_7_2.get(p_).get(c).toVector()).normalize();
-									psheep1_7_2.get(p_).get(c).setYaw(plocs.get(p_).get(c));
-									psheep1_7_2.get(p_).get(c).setVelocity(direction.multiply(0.5D));
-									c++;
-								}
-							} else {
-								pvecs.put(p_, new ArrayList<Vector>(Arrays.asList(p_.getLocation().getDirection().normalize().add(new Vector(0.1D, 0.1D, 0.1D)))));
-							}
+					final ArrayList<FallingBlock> plist = psheep.get(p_);
+					for (FallingBlock ms : plist) {
+						if (c < pvecs.get(p_).size()) {
+							final Location bl = plocs.get(p_).get(c);
+							Vector direction = bl.toVector()
+									.subtract(ms.toVector()).normalize();
+							ms.setYaw(bl);
+							ms.setVelocity(direction.multiply(0.5D));
+							if (MinigamesAPI.debug) System.out.println("Sheep[" + p__ + "/" + ms.toVector() + "] yaws at " + bl);
+							c++;
 						}
 					}
-						break;
-					case V1_7_R2: {
-						for (MEFallingBlock1_7_5 ms : psheep1_7_5.get(p_)) {
-							if (pvecs.containsKey(p_)) {
-								if (c < pvecs.get(p_).size()) {
-									Vector direction = plocs.get(p_).get(c).toVector().subtract(psheep1_7_5.get(p_).get(c).toVector()).normalize();
-									psheep1_7_5.get(p_).get(c).setYaw(plocs.get(p_).get(c));
-									psheep1_7_5.get(p_).get(c).setVelocity(direction.multiply(0.5D));
-									c++;
-								}
-							} else {
-								pvecs.put(p_, new ArrayList<Vector>(Arrays.asList(p_.getLocation().getDirection().normalize().add(new Vector(0.1D, 0.1D, 0.1D)))));
-							}
-						}
-					}
-						break;
-					case V1_7_R3: {
-						for (MEFallingBlock1_7_9 ms : psheep1_7_9.get(p_)) {
-							if (pvecs.containsKey(p_)) {
-								if (c < pvecs.get(p_).size()) {
-									Vector direction = plocs.get(p_).get(c).toVector().subtract(psheep1_7_9.get(p_).get(c).toVector()).normalize();
-									psheep1_7_9.get(p_).get(c).setYaw(plocs.get(p_).get(c));
-									psheep1_7_9.get(p_).get(c).setVelocity(direction.multiply(0.5D));
-									c++;
-								}
-							} else {
-								pvecs.put(p_, new ArrayList<Vector>(Arrays.asList(p_.getLocation().getDirection().normalize().add(new Vector(0.1D, 0.1D, 0.1D)))));
-							}
-						}
-					}
-						break;
-					case V1_7_R4: {
-						for (MEFallingBlock1_7_10 ms : psheep1_7_10.get(p_)) {
-							if (pvecs.containsKey(p_)) {
-								if (c < pvecs.get(p_).size()) {
-									Vector direction = plocs.get(p_).get(c).toVector().subtract(psheep1_7_10.get(p_).get(c).toVector()).normalize();
-									psheep1_7_10.get(p_).get(c).setYaw(plocs.get(p_).get(c));
-									psheep1_7_10.get(p_).get(c).setVelocity(direction.multiply(0.5D));
-									c++;
-								}
-							} else {
-								pvecs.put(p_, new ArrayList<Vector>(Arrays.asList(p_.getLocation().getDirection().normalize().add(new Vector(0.1D, 0.1D, 0.1D)))));
-							}
-						}
-					}
-						break;
-					case V1_8:
-					case V1_8_R1: {
-						for (MEFallingBlock1_8 ms : psheep1_8.get(p_)) {
-							if (pvecs.containsKey(p_)) {
-								if (c < pvecs.get(p_).size()) {
-									Vector direction = plocs.get(p_).get(c).toVector().subtract(psheep1_8.get(p_).get(c).toVector()).normalize();
-									psheep1_8.get(p_).get(c).setYaw(plocs.get(p_).get(c));
-									psheep1_8.get(p_).get(c).setVelocity(direction.multiply(0.5D));
-									c++;
-								}
-							} else {
-								pvecs.put(p_, new ArrayList<Vector>(Arrays.asList(p_.getLocation().getDirection().normalize().add(new Vector(0.1D, 0.1D, 0.1D)))));
-							}
-						}
-					}
-						break;
-					case V1_8_R2: {
-						for (MEFallingBlock1_8_5 ms : psheep1_8_5.get(p_)) {
-							if (pvecs.containsKey(p_)) {
-								if (c < pvecs.get(p_).size()) {
-									Vector direction = plocs.get(p_).get(c).toVector().subtract(psheep1_8_5.get(p_).get(c).toVector()).normalize();
-									psheep1_8_5.get(p_).get(c).setYaw(plocs.get(p_).get(c));
-									psheep1_8_5.get(p_).get(c).setVelocity(direction.multiply(0.5D));
-									c++;
-								}
-							} else {
-								pvecs.put(p_, new ArrayList<Vector>(Arrays.asList(p_.getLocation().getDirection().normalize().add(new Vector(0.1D, 0.1D, 0.1D)))));
-							}
-						}
-					}
-						break;
-					case V1_9:
-					case V1_9_R1: {
-						for (MEFallingBlock1_9 ms : psheep1_9.get(p_)) {
-							if (pvecs.containsKey(p_)) {
-								if (c < pvecs.get(p_).size()) {
-									Vector direction = plocs.get(p_).get(c).toVector().subtract(psheep1_9.get(p_).get(c).toVector()).normalize();
-									psheep1_9.get(p_).get(c).setYaw(plocs.get(p_).get(c));
-									psheep1_9.get(p_).get(c).setVelocity(direction.multiply(0.5D));
-									c++;
-								}
-							} else {
-								pvecs.put(p_, new ArrayList<Vector>(Arrays.asList(p_.getLocation().getDirection().normalize().add(new Vector(0.1D, 0.1D, 0.2D)))));
-							}
-						}
-					}
-						break;
-					case V1_9_R2: {
-						for (MEFallingBlock1_9_4 ms : psheep1_9_4.get(p_)) {
-							if (pvecs.containsKey(p_)) {
-								if (c < pvecs.get(p_).size()) {
-									Vector direction = plocs.get(p_).get(c).toVector().subtract(psheep1_9_4.get(p_).get(c).toVector()).normalize();
-									psheep1_9_4.get(p_).get(c).setYaw(plocs.get(p_).get(c));
-									psheep1_9_4.get(p_).get(c).setVelocity(direction.multiply(0.5D));
-									c++;
-								}
-							} else {
-								pvecs.put(p_, new ArrayList<Vector>(Arrays.asList(p_.getLocation().getDirection().normalize().add(new Vector(0.1D, 0.1D, 0.1D)))));
-							}
-						}
-					}
-						break;
-					}
+					debugPSheep(p__, plist);
 				}
 			}
 		}
