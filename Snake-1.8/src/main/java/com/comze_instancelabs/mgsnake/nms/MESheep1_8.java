@@ -25,7 +25,7 @@ public class MESheep1_8 extends EntitySheep implements FallingBlock {
 		this.yaw = loc.getYaw();
 	}
 	@Override
-	public void h() {
+	public void s_() {
 		motY = 0;
 		move(motX, motY, motZ);
 	}

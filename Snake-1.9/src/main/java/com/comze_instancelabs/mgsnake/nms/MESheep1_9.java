@@ -6,7 +6,6 @@ import org.bukkit.util.Vector;
 import net.minecraft.server.v1_9_R1.DamageSource;
 import net.minecraft.server.v1_9_R1.EntityComplexPart;
 import net.minecraft.server.v1_9_R1.EntitySheep;
-import net.minecraft.server.v1_9_R1.MinecraftServer;
 import net.minecraft.server.v1_9_R1.World;
 
 public class MESheep1_9 extends EntitySheep implements FallingBlock {
@@ -26,10 +25,9 @@ public class MESheep1_9 extends EntitySheep implements FallingBlock {
 		this.yaw = loc.getYaw();
 	}
 	@Override
-	public MinecraftServer h() {
+	public void m() {
 		motY = 0;
 		move(motX, motY, motZ);
-		return null;
 	}
 
 	/*@Override

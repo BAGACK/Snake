@@ -11,5 +11,7 @@ public interface FallingBlock
 	void setYaw(Location location);
 
 	void setVelocity(Vector multiply);
+	
+	void die();
 
 }

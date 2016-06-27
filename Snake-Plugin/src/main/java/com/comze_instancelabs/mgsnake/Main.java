@@ -157,14 +157,19 @@ public class Main extends JavaPlugin implements Listener {
 				{
 					useSheeps = cf.getConfig().getBoolean(ArenaConfigStrings.ARENAS_PREFIX + arena + ".useSheeps");
 				}
-				ret.add(initArena(arena, useSheeps));
+				long tickCount = 2L;
+				if (cf.getConfig().isSet(ArenaConfigStrings.ARENAS_PREFIX + arena + ".tickCount"))
+				{
+					tickCount = cf.getConfig().getLong(ArenaConfigStrings.ARENAS_PREFIX + arena + ".tickCount");
+				}
+				ret.add(initArena(arena, useSheeps, tickCount));
 			}
 		}
 		return ret;
 	}
 
-	public static IArena initArena(String arena, boolean useSheeps) {
-		IArena a = new IArena(m, arena, useSheeps);
+	public static IArena initArena(String arena, boolean useSheeps, long tickCount) {
+		IArena a = new IArena(m, arena, useSheeps, tickCount);
 		ArenaSetup s = MinigamesAPI.getAPI().pinstances.get(m).arenaSetup;
 		a.init(Util.getSignLocationFromArena(m, arena), Util.getAllSpawns(m, arena), Util.getMainLobby(m), Util.getComponentForArena(m, arena, "lobby"), s.getPlayerCount(m, arena, true), s.getPlayerCount(m, arena, false), s.getArenaVIP(m, arena));
 		return a;

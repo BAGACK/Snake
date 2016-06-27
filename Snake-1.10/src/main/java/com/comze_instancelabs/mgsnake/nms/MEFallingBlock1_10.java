@@ -9,7 +9,6 @@ import net.minecraft.server.v1_10_R1.DamageSource;
 import net.minecraft.server.v1_10_R1.EntityComplexPart;
 import net.minecraft.server.v1_10_R1.EntityFallingBlock;
 import net.minecraft.server.v1_10_R1.IBlockData;
-import net.minecraft.server.v1_10_R1.MinecraftServer;
 import net.minecraft.server.v1_10_R1.World;
 
 public class MEFallingBlock1_10 extends EntityFallingBlock implements FallingBlock {
@@ -33,17 +32,16 @@ public class MEFallingBlock1_10 extends EntityFallingBlock implements FallingBlo
 	}
 
 	@Override
-	public MinecraftServer h() {
+	public void m() {
 		motY = 0;
 		move(motX, motY, motZ);
-		return null;
 	}
 
-	/*
-	 * @Override public void g(double x, double y, double z) {
-	 * 
-	 * }
-	 */
+	
+	@Override public void g(double x, double y, double z) {
+	 
+	}
+	
 
 	public boolean damageEntity(DamageSource damagesource, int i) {
 		return false;
