@@ -5,14 +5,14 @@ import org.bukkit.util.Vector;
 
 import net.minecraft.server.v1_7_R3.DamageSource;
 import net.minecraft.server.v1_7_R3.EntityComplexPart;
-import net.minecraft.server.v1_7_R3.EntityFallingBlock;
+import net.minecraft.server.v1_7_R3.EntitySheep;
 import net.minecraft.server.v1_7_R3.World;
 
-public class MEFallingBlock1_7_9 extends EntityFallingBlock implements FallingBlock {
+public class MESheep1_7_9 extends EntitySheep implements FallingBlock {
 
 	private String arena;
 
-	public MEFallingBlock1_7_9(String arena, Location loc, World world) {
+	public MESheep1_7_9(String arena, Location loc, World world) {
 		super(world);
 		this.arena = arena;
 		setPosition(loc.getX(), loc.getY(), loc.getZ());

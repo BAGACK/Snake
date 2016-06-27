@@ -25,6 +25,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
 
+import com.comze_instancelabs.mgsnake.nms.Register;
 import com.comze_instancelabs.mgsnake.nms.register1_10;
 import com.comze_instancelabs.mgsnake.nms.register1_7_10;
 import com.comze_instancelabs.mgsnake.nms.register1_7_2;
@@ -59,6 +60,13 @@ public class Main extends JavaPlugin implements Listener {
 
 	ArrayList<String> pspeed = new ArrayList<String>();
 	ArrayList<String> pjump = new ArrayList<String>();
+	
+	private Register nmsregister;
+	
+	public Register getNmsRegister()
+	{
+		return this.nmsregister;
+	}
 
 	public void onEnable() {
 		m = this;
@@ -81,42 +89,51 @@ public class Main extends JavaPlugin implements Listener {
 			break;
 		case V1_10:
 		case V1_10_R1:
-			register1_10.registerEntities();
+			this.nmsregister = new register1_10();
+			this.nmsregister.registerEntities();
 			getLogger().info("Turned on 1.10 mode.");
 			break;
 		case V1_7:
 		case V1_7_R1:
-			register1_7_2.registerEntities();
+			this.nmsregister = new register1_7_2();
+			this.nmsregister.registerEntities();
 			getLogger().info("Turned on 1.7.2 mode.");
 			break;
 		case V1_7_R2:
-			register1_7_5.registerEntities();
+			this.nmsregister = new register1_7_5();
+			this.nmsregister.registerEntities();
 			getLogger().info("Turned on 1.7.5 mode.");
 			break;
 		case V1_7_R3:
-			register1_7_9.registerEntities();
+			this.nmsregister = new register1_7_9();
+			this.nmsregister.registerEntities();
 			getLogger().info("Turned on 1.7.9 mode.");
 			break;
 		case V1_7_R4:
-			register1_7_10.registerEntities();
+			this.nmsregister = new register1_7_10();
+			this.nmsregister.registerEntities();
 			getLogger().info("Turned on 1.7.10 mode.");
 			break;
 		case V1_8_R1:
 		case V1_8:
-			register1_8.registerEntities();
+			this.nmsregister = new register1_8();
+			this.nmsregister.registerEntities();
 			getLogger().info("Turned on 1.8 mode.");
 			break;
 		case V1_8_R2:
-			register1_8_5.registerEntities();
+			this.nmsregister = new register1_8_5();
+			this.nmsregister.registerEntities();
 			getLogger().info("Turned on 1.8.5 mode.");
 			break;
 		case V1_9:
 		case V1_9_R1:
-			register1_9.registerEntities();
+			this.nmsregister = new register1_9();
+			this.nmsregister.registerEntities();
 			getLogger().info("Turned on 1.9/1.9.2 mode.");
 			break;
 		case V1_9_R2:
-			register1_9_4.registerEntities();
+			this.nmsregister = new register1_9_4();
+			this.nmsregister.registerEntities();
 			getLogger().info("Turned on 1.9_4 mode.");
 			break;
 		}
@@ -135,14 +152,19 @@ public class Main extends JavaPlugin implements Listener {
 		}
 		for (String arena : config.getConfigurationSection(ArenaConfigStrings.ARENAS_PREFIX).getKeys(false)) {
 			if (Validator.isArenaValid(plugin, arena, cf.getConfig())) {
-				ret.add(initArena(arena));
+				boolean useSheeps = true;
+				if (cf.getConfig().isSet(ArenaConfigStrings.ARENAS_PREFIX + arena + ".useSheeps"))
+				{
+					useSheeps = cf.getConfig().getBoolean(ArenaConfigStrings.ARENAS_PREFIX + arena + ".useSheeps");
+				}
+				ret.add(initArena(arena, useSheeps));
 			}
 		}
 		return ret;
 	}
 
-	public static IArena initArena(String arena) {
-		IArena a = new IArena(m, arena);
+	public static IArena initArena(String arena, boolean useSheeps) {
+		IArena a = new IArena(m, arena, useSheeps);
 		ArenaSetup s = MinigamesAPI.getAPI().pinstances.get(m).arenaSetup;
 		a.init(Util.getSignLocationFromArena(m, arena), Util.getAllSpawns(m, arena), Util.getMainLobby(m), Util.getComponentForArena(m, arena, "lobby"), s.getPlayerCount(m, arena, true), s.getPlayerCount(m, arena, false), s.getArenaVIP(m, arena));
 		return a;

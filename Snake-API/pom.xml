@@ -2,11 +2,11 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.MCE-Plugins</groupId>
-	<artifactId>MGSnake-1.9</artifactId>
+	<artifactId>MGSnake-API</artifactId>
 	<version>1.14.9-SNAPSHOT</version>
 	<packaging>jar</packaging>
-	<name>Snake 1.9</name>
-	<description>Snake Minigame for spigot 1.9</description>
+	<name>Snake API</name>
+	<description>Snake API Minigame (Main plugin)</description>
 
 	<parent>
 		<groupId>com.github.MCE-Plugins</groupId>
@@ -23,21 +23,15 @@
 			<groupId>org.bukkit</groupId>
   			<artifactId>bukkit</artifactId>
   		</dependency>
-  		
-  		<dependency>
-  			<groupId>net.minecraft.server</groupId>
-  			<artifactId>v1_9_R1</artifactId>
-  			<version>1.9</version>
-  		</dependency>
-  		
-		<dependency>
-			<groupId>com.github.MCE-Plugins</groupId>
-  			<artifactId>MGSnake-API</artifactId>
-  			<version>1.14.9-SNAPSHOT</version>
-  		</dependency>
 	</dependencies>
 
 	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
 		<plugins>
 			<plugin>
 				<version>3.0.0</version>
@@ -78,7 +72,7 @@
 						<configuration>
 							<artifactSet>
 								<includes>
-									<include>com.comze_instancelabs:*</include>
+									<include>com.github.MCE-Plugins:MGSnake*</include>
 								</includes>
 							</artifactSet>
 						</configuration>
