@@ -363,12 +363,12 @@ public class IArena extends Arena {
 						Vector direction = bl.toVector()
 								.subtract(ms.toVector()).normalize();
 						ms.setYaw(bl);
-						ms.setVelocity(direction.multiply(0.5D));
+						ms.setVelocity(direction.multiply(0.5D / this.tickCount));
 						if (MinigamesAPI.debug) System.out.println("Sheep[" + p__ + "/" + ms.toVector() + "] yaws at " + bl);
 						c++;
 					}
-					debugPSheep(p__, plist);
 				}
+				debugPSheep(p__, plist);
 			}
 		}
 	}

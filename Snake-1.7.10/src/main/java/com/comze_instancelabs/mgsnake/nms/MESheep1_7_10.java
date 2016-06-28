@@ -19,10 +19,11 @@ public class MESheep1_7_10 extends EntitySheep implements FallingBlock {
 	}
 
 
-	public void setYaw(Location target) {
-		final Location loc = new Location(target.getWorld(), this.locX, this.locY, this.locZ);
-		loc.setDirection(target.toVector().subtract(loc.toVector()));
-		this.yaw = loc.getYaw();
+	public void setYaw(Location l2) {
+//		final Location l1 = this.getBukkitEntity().getLocation();
+//		l1.setDirection(l1.toVector().subtract(l2.toVector()));
+		this.aO = l2.getYaw();
+		this.yaw = l2.getYaw();
 	}
 	
 	@Override
