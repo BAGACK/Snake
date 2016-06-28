@@ -25,10 +25,10 @@ public class MEFallingBlock1_10 extends EntityFallingBlock implements FallingBlo
 		return Block.getByCombinedId(35 + (color << 12));
 	}
 
-	public void setYaw(Location target) {
-		final Location loc = new Location(target.getWorld(), this.locX, this.locY, this.locZ);
-		loc.setDirection(target.toVector().subtract(loc.toVector()));
-		this.yaw = loc.getYaw();
+	public void setYaw(Location l2) {
+//		final Location l1 = this.getBukkitEntity().getLocation();
+//		l1.setDirection(l1.toVector().subtract(l2.toVector()));
+		this.yaw = l2.getYaw();
 	}
 
 	@Override
