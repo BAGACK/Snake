@@ -109,11 +109,14 @@ public class IArena extends Arena {
 		
 		// saveDestroyBlocks
 		final ArrayList<FallingBlock> plist = psheep.get(p);
-		for (FallingBlock ms : plist)
+		if (plist != null)
 		{
-			ms.die();
+			for (FallingBlock ms : plist)
+			{
+				ms.die();
+			}
+			plist.clear();
 		}
-		plist.clear();
 		
 		p.removePotionEffect(PotionEffectType.JUMP);
 		p.removePotionEffect(PotionEffectType.INVISIBILITY);
