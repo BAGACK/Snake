@@ -176,7 +176,7 @@ public class Main extends JavaPlugin implements Listener {
 	}
 
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		return cmdhandler.handleArgs(this, "mgsnake", "/" + cmd.getName(), sender, args);
+		return cmdhandler.handleArgs(this, MinigamesAPI.getAPI().getPermissionGamePrefix("snake"), "/" + cmd.getName(), sender, args);
 	}
 
 	@EventHandler
