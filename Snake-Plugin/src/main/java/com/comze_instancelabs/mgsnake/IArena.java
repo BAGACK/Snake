@@ -84,7 +84,6 @@ public class IArena extends Arena {
 						if (a != null) {
 							if (a.getArenaState() != ArenaState.INGAME) {
 								if (powerup_task != null) {
-									System.out.println("Cancelled powerup task.");
 									powerup_task.cancel();
 								}
 							}
@@ -93,7 +92,6 @@ public class IArena extends Arena {
 						failcount++;
 						if (failcount > 2) {
 							if (powerup_task != null) {
-								System.out.println("Cancelled powerup task.");
 								powerup_task.cancel();
 							}
 						}
@@ -196,10 +194,10 @@ public class IArena extends Arena {
 	{
 		if (MinigamesAPI.debug)
 		{
-			System.out.println("SHEEPS[" + player + "]:");
+			getPlugin().getLogger().fine("SHEEPS[" + player + "]:");
 			for (final FallingBlock block : blocks)
 			{
-				System.out.println("  " + block.toVector());
+				getPlugin().getLogger().fine("  " + block.toVector());
 			}
 		}
 	}
@@ -261,7 +259,7 @@ public class IArena extends Arena {
 
 						Location pl_ = l.clone().add(0D, 1D, 0D);
 						if (pl_.getBlock().getType() != Material.AIR) {
-							if (MinigamesAPI.debug) System.out.println("Player " + p_ + " ran into solid block @ " + pl_);
+							if (MinigamesAPI.debug) getPlugin().getLogger().fine("Player " + p_ + " ran into solid block @ " + pl_);
 							a.spectate(p.getName());
 						}
 
@@ -283,13 +281,13 @@ public class IArena extends Arena {
 								Sheep s = (Sheep) ent;
 								DyeColor color = ((Colorable) s).getColor();
 								if (color.getData() != (byte) pteam.get(p.getName()).byteValue()) {
-									if (MinigamesAPI.debug) System.out.println("Player " + p_ + " ran into sheeps with color " + color);
+									if (MinigamesAPI.debug) getPlugin().getLogger().fine("Player " + p_ + " ran into sheeps with color " + color);
 									a.spectate(p.getName());
 								}
 							} else if (!useSheeps && ent.getType() == EntityType.FALLING_BLOCK) {
 								org.bukkit.entity.FallingBlock s = (org.bukkit.entity.FallingBlock) ent;
 								if (s.getBlockData() != (byte) pteam.get(p.getName()).byteValue()) {
-									if (MinigamesAPI.debug) System.out.println("Player " + p_ + " ran into block with color " + s.getBlockData());
+									if (MinigamesAPI.debug) getPlugin().getLogger().fine("Player " + p_ + " ran into block with color " + s.getBlockData());
 									a.spectate(p.getName());
 								}
 							} else if (ent.getType() == EntityType.SLIME) {
@@ -316,7 +314,6 @@ public class IArena extends Arena {
 //							temp.add(v.multiply(0.45D));
 //						}
 
-						// System.out.println("[A] " + pvecs.size() +
 						// pvecs.get(p));
 
 					}
@@ -367,7 +364,7 @@ public class IArena extends Arena {
 								.subtract(ms.toVector()).normalize();
 						ms.setYaw(bl);
 						ms.setVelocity(direction.multiply(0.5D));
-						if (MinigamesAPI.debug) System.out.println("Sheep[" + p__ + "/" + ms.toVector() + "] yaws at " + bl);
+						if (MinigamesAPI.debug) getPlugin().getLogger().fine("Sheep[" + p__ + "/" + ms.toVector() + "] yaws at " + bl);
 						c++;
 					}
 				}
