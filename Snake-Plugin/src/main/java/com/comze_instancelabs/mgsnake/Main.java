@@ -33,6 +33,7 @@ import com.comze_instancelabs.mgsnake.nms.register1_7_5;
 import com.comze_instancelabs.mgsnake.nms.register1_7_9;
 import com.comze_instancelabs.mgsnake.nms.register1_8;
 import com.comze_instancelabs.mgsnake.nms.register1_8_5;
+import com.comze_instancelabs.mgsnake.nms.register1_8_8;
 import com.comze_instancelabs.mgsnake.nms.register1_9;
 import com.comze_instancelabs.mgsnake.nms.register1_9_4;
 import com.comze_instancelabs.minigamesapi.Arena;
@@ -124,6 +125,11 @@ public class Main extends JavaPlugin implements Listener {
 			this.nmsregister = new register1_8_5();
 			this.nmsregister.registerEntities();
 			getLogger().info("Turned on 1.8.5 mode.");
+			break;
+		case V1_8_R3:
+			this.nmsregister = new register1_8_8();
+			this.nmsregister.registerEntities();
+			getLogger().info("Turned on 1.8.8 mode.");
 			break;
 		case V1_9:
 		case V1_9_R1:
