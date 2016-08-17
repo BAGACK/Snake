@@ -1,6 +1,7 @@
 package com.comze_instancelabs.mgsnake;
 
 import java.util.HashMap;
+import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -46,10 +47,8 @@ public class IArenaScoreboard extends ArenaScoreboard {
 				for (String pl_ : arena.getAllPlayers()) {
 					Player p = Bukkit.getPlayer(pl_);
 					int score = 0;
-					// System.out.println(arena.arenasize.containsKey(arena.getName()));
 					if (arena.arenasize.containsKey(arena.getName())) {
 						score = arena.arenasize.get(arena.getName());
-						// System.out.println(score);
 					}
 					if (!pli.global_lost.containsKey(pl_)) {
 						try {
@@ -77,7 +76,7 @@ public class IArenaScoreboard extends ArenaScoreboard {
 				Bukkit.getPlayer(p_).setScoreboard(ascore.get(arena.getName()));
 			}
 		} catch (Exception e) {
-			System.out.println("Failed setting Scoreboard: " + e.getMessage());
+			plugin.getLogger().log(Level.SEVERE, "Failed setting Scoreboard:", e);
 		}
 	}
 

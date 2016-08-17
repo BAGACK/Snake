@@ -2,12 +2,15 @@ package com.comze_instancelabs.mgsnake.nms;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_10_R1.CraftWorld;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.plugin.Plugin;
+
+import com.comze_instancelabs.minigamesapi.MinigamesAPI;
 
 import net.minecraft.server.v1_10_R1.Block;
 import net.minecraft.server.v1_10_R1.EntityTypes;
@@ -51,7 +54,7 @@ public class register1_10 implements Register {
 
 			return true;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			MinigamesAPI.getAPI().getLogger().log(Level.WARNING, "exception", ex);
 			return false;
 		}
 	}
