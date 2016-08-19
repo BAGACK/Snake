@@ -7,12 +7,13 @@ import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_8_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_8_R2.entity.CraftLivingEntity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.plugin.Plugin;
 
 import com.comze_instancelabs.minigamesapi.MinigamesAPI;
 
-import net.minecraft.server.v1_8_R2.Block;
 import net.minecraft.server.v1_8_R2.EntityTypes;
 import net.minecraft.server.v1_8_R2.EnumColor;
 
@@ -88,5 +89,10 @@ public class register1_8_5 implements Register {
 		});
 		
 		return t_;
+	}
+
+	@Override
+	public boolean isSheep(LivingEntity entity) {
+		return ((CraftLivingEntity) entity).getHandle() instanceof MESheep1_8_5;
 	}
 }

@@ -7,6 +7,8 @@ import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_7_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_7_R2.entity.CraftLivingEntity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.plugin.Plugin;
 
@@ -88,5 +90,10 @@ public class register1_7_5 implements Register {
 		});
 		
 		return t_;
+	}
+
+	@Override
+	public boolean isSheep(LivingEntity entity) {
+		return ((CraftLivingEntity) entity).getHandle() instanceof MESheep1_7_5;
 	}
 }

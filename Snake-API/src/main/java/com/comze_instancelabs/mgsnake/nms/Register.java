@@ -1,6 +1,7 @@
 package com.comze_instancelabs.mgsnake.nms;
 
 import org.bukkit.Location;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.plugin.Plugin;
 
 public interface Register
@@ -31,5 +32,12 @@ public interface Register
 	 * @return the falling block/ wool.
 	 */
 	public FallingBlock spawnWool(Plugin m, String arena, Location t, final Integer i);
+
+	/**
+	 * Checks if this is a snake sheep
+	 * @param entity
+	 * @return
+	 */
+	public boolean isSheep(LivingEntity entity);
 	
 }
