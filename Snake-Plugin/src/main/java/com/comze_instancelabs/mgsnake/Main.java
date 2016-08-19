@@ -72,12 +72,15 @@ public class Main extends JavaPlugin implements Listener {
 	public void onEnable() {
 		m = this;
 		MinigamesAPI.getAPI();
-		api = MinigamesAPI.setupAPI(this, "snake", IArena.class, new ArenasConfig(this), new MessagesConfig(this), new IClassesConfig(this), new StatsConfig(this, false), new DefaultConfig(this, false), false);
+		api = MinigamesAPI.setupAPI(this, "snake", IArena.class, new ArenasConfig(this), new MessagesConfig(this), new IClassesConfig(this), new StatsConfig(this, false), new DefaultConfig(this, false), true);
 		PluginInstance pinstance = api.pinstances.get(this);
 		pinstance.addLoadedArenas(loadArenas(this, pinstance.getArenasConfig()));
 		Bukkit.getPluginManager().registerEvents(this, this);
 		scoreboard = new IArenaScoreboard(this);
 		pinstance.scoreboardManager = scoreboard;
+		IArenaListener listener = new IArenaListener(this, pinstance, "snake");
+		pinstance.setArenaListener(listener);
+		MinigamesAPI.getAPI().registerArenaListenerLater(this, listener);
 		pli = pinstance;
 
 		// let's check which version we're on.
