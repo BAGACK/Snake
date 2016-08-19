@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
@@ -58,6 +59,12 @@ public class IArena extends Arena {
 		final IArena a = this;
 		powerup_task = Bukkit.getScheduler().runTaskTimer(m, new Runnable() {
 			public void run() {
+				if (a.getArenaState() != ArenaState.INGAME) {
+					if (powerup_task != null) {
+						powerup_task.cancel();
+						return;
+					}
+				}
 				if (Math.random() * 100 <= m.getConfig().getInt("config.powerup_spawn_percentage")) {
 					try {
 						Player p = Bukkit
@@ -88,7 +95,7 @@ public class IArena extends Arena {
 								}
 							}
 						}
-						Bukkit.getLogger().info("Use the latest MinigamesLib version to get powerups.");
+						Bukkit.getLogger().log(Level.WARNING, "Use the latest MinigamesLib version to get powerups.", e);
 						failcount++;
 						if (failcount > 2) {
 							if (powerup_task != null) {
