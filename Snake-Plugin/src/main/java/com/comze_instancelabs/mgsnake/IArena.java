@@ -287,7 +287,7 @@ public class IArena extends Arena {
 							if (useSheeps && ent.getType() == EntityType.SHEEP) {
 								Sheep s = (Sheep) ent;
 								DyeColor color = ((Colorable) s).getColor();
-								if (color.getData() != (byte) pteam.get(p.getName()).byteValue()) {
+								if (color.getWoolData() != (byte) pteam.get(p.getName()).byteValue()) {
 									if (MinigamesAPI.debug) getPlugin().getLogger().fine("Player " + p_ + " ran into sheeps with color " + color);
 									a.spectate(p.getName());
 								}

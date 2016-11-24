@@ -2,11 +2,11 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.MCE-Plugins</groupId>
-	<artifactId>MGSnake-1.8.5</artifactId>
+	<artifactId>MGSnake-1.11</artifactId>
 	<version>1.14.14-SNAPSHOT</version>
 	<packaging>jar</packaging>
-	<name>Snake 1.8.5</name>
-	<description>Snake Minigame for spigot 1.8.5</description>
+	<name>Snake 1.11</name>
+	<description>Snake Minigame for spigot 1.11</description>
 
 	<parent>
 		<groupId>com.github.MCE-Plugins</groupId>
@@ -27,7 +27,7 @@
   		<dependency>
   			<groupId>org.spigotmc</groupId>
   			<artifactId>spigot</artifactId>
-  			<version>1.8.3-R0.1-SNAPSHOT</version>
+  			<version>1.11-R0.1-SNAPSHOT</version>
   			<scope>provided</scope>
   		</dependency>
   		

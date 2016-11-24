@@ -27,6 +27,7 @@ import org.bukkit.util.Vector;
 
 import com.comze_instancelabs.mgsnake.nms.Register;
 import com.comze_instancelabs.mgsnake.nms.register1_10;
+import com.comze_instancelabs.mgsnake.nms.register1_11;
 import com.comze_instancelabs.mgsnake.nms.register1_7_10;
 import com.comze_instancelabs.mgsnake.nms.register1_7_2;
 import com.comze_instancelabs.mgsnake.nms.register1_7_5;
@@ -90,6 +91,12 @@ public class Main extends JavaPlugin implements Listener {
 		default:
 		case Unknown:
 			getLogger().info("Unsupported version");
+			break;
+		case V1_11:
+		case V1_11_R1:
+			this.nmsregister = new register1_11();
+			this.nmsregister.registerEntities();
+			getLogger().info("Turned on 1.11 mode.");
 			break;
 		case V1_10:
 		case V1_10_R1:
