@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.MCE-Plugins</groupId>
 	<artifactId>MGSnake-parent</artifactId>
-	<version>1.14.14-SNAPSHOT</version>
+	<version>1.14.14</version>
 	<packaging>pom</packaging>
 	<name>Snake Minigame Parent</name>
 	<description>Parent POM of Snake Minigame</description>
@@ -11,7 +11,7 @@
 	<parent>
 		<groupId>com.github.MCE-Plugins</groupId>
 		<artifactId>MinigamesLib-parent</artifactId>
-		<version>1.14.14-SNAPSHOT</version>
+		<version>1.14.14</version>
 	</parent>
       		<modules>
 				<module>Snake-API</module>
