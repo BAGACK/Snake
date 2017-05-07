@@ -1,4 +1,4 @@
-Snake [![Build Status](http://www.minigameslib.de/build.php?app=Snake&major=1)](http://www.minigameslib.de/buildref.php?app=Snake&major=1)
+Snake [![Build Status](http://www.minigameslib.de/build.png?app=Snake&major=1)](http://www.minigameslib.de/buildref.php?app=Snake&major=1)
 =======
 
 Snake game for spigot-minecraft using [MinigamesAPI](https://github.com/MysticCity/MinigamesAPI).
