@@ -48,6 +48,7 @@ import com.comze_instancelabs.minigamesapi.config.ArenasConfig;
 import com.comze_instancelabs.minigamesapi.config.DefaultConfig;
 import com.comze_instancelabs.minigamesapi.config.MessagesConfig;
 import com.comze_instancelabs.minigamesapi.config.StatsConfig;
+import com.comze_instancelabs.minigamesapi.util.PlayerPickupItemHelper;
 import com.comze_instancelabs.minigamesapi.util.Util;
 import com.comze_instancelabs.minigamesapi.util.Validator;
 
@@ -165,6 +166,8 @@ public class Main extends JavaPlugin implements Listener {
 		this.getConfig().addDefault("config.players_invisible", true);
 		this.getConfig().options().copyDefaults(true);
 		this.saveConfig();
+		
+		new PlayerPickupItemHelper(this, this::onPlayerPickup);
 	}
 
 	public static ArrayList<Arena> loadArenas(JavaPlugin plugin, ArenasConfig cf) {
@@ -202,8 +205,7 @@ public class Main extends JavaPlugin implements Listener {
 		return cmdhandler.handleArgs(this, MinigamesAPI.getAPI().getPermissionGamePrefix("snake"), "/" + cmd.getName(), sender, args);
 	}
 
-	@EventHandler
-	public void onPlayerPickup(PlayerPickupItemEvent event) {
+	public void onPlayerPickup(PlayerPickupItemHelper.CustomPickupEvent event) {
 		if (pli.global_players.containsKey(event.getPlayer().getName())) {
 			if (event.getItem().getItemStack().getType() != Material.IRON_BOOTS && event.getItem().getItemStack().getType() != Material.GOLD_BOOTS) {
 				event.setCancelled(true);
